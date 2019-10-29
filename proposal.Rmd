@@ -1,0 +1,11 @@
+---
+title: "Project Proposal"
+author: "Mitchell Kazin, Adam VanGorp, Shivam Vashi, and Mathew P"
+date: "10/29/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
