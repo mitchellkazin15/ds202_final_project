@@ -9,3 +9,23 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+ 
+<b>Project Coordinator:</b> Mitchell Kazin<br>
+
+<b>Member:</b> Adam VanGorp, Shivam Vashi, Mathew Peterson<br>
+
+<b>GitHub Repo:</b> https://github.com/mitchellkazin15/ds202_final_project <br>
+
+<b>UFO Dataset:</b> https://kaggle.com/emorelli/consolidated-ufo-weather-data <br> 
+
+<b>Overview:</b><br> 
+<p>
+This dataset contains details of UFO sightings as well as corresponding weather data from the time and location of the sighting across the United States. The data covers the years 1997-2017 and contains data from 8000+ cities. There are 2 columns that describe the UFO, color and shape, and 18 different weather related columns for the time of the sighting.</p>
+
+<b>Exploratory Analysis Plan:</b><br>
+<p>
+One thing that we would like to explore is how the weather affects frequency of sightings. The dataset contains many different types of weather measurements so it may be useful to start with a facet histogram plot to see what types of weather correspond to the highest number of sightings.
+</p>
+<p>
+    Another question we could answer is where are sightings most likely to occur. The dataset contains State and city so it may be useful to create a bar chart grouped by state or more effectively we could create a heatmap of the United States to help visualize the density of occurrences. These two topics of exploration can be combined into a bar chart of the most common locations with the bars being colored with the type of weather.
+</p>
