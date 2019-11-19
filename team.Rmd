@@ -1,0 +1,16 @@
+---
+title: "Final Project"
+author: "Mitchell Kazin, Adam VanGorp, Shivam Vashi, and Mathew P"
+date: "11/19/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+data = read.csv("consolidated_weather_V03.csv")
+head(data)
+```
