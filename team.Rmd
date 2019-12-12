@@ -5,7 +5,9 @@ author: "Mitchell Kazin, Adam VanGorp, Shivam Vashi, and Mathew P"
 date: "11/19/2019"
 output: html_document
 ---
-
+GitHub Repository: https://github.com/mitchellkazin15/ds202_final_project
+Owner Username: mitchellkazin15
+Collaborators: Cygorp, MDLeader53, SVashi
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -47,7 +49,7 @@ linmod
 summary(linmod)
 summary(linmod)$r.squared
 
-### Weather KNN Model
+### Weather KNN Model 
 weather = data[,-c(1,2,3,5,6,7,8,9,13,14,17,21,26,27)]
 weather = weather[complete.cases(weather),]
 n = nrow(weather)
