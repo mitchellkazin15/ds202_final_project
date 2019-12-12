@@ -1,0 +1,81 @@
+
+---
+title: "Final Project"
+author: "Mitchell Kazin, Adam VanGorp, Shivam Vashi, and Mathew P"
+date: "11/19/2019"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+data = read.csv("consolidated_weather_V03.csv")
+head(data)
+library(ggplot2)
+library(class)
+```
+
+```{r}
+################### Visibility Exploration
+### summary statistics
+data <- mutate_at(data, vars(17:17),as.numeric)
+summary(data$vis)
+
+### frequency of sightings by visibility
+dat <- as.data.frame(table(data$vis))
+dat
+
+### histogram
+ggplot(data, aes(x=vis)) + geom_histogram() + ggtitle("Count of UFO Sightings by Visibility") + xlab("Visibility") + ylab("Count of UFO Sightings")
+
+### scatter plot
+ggplot(dat, aes(x=Var1, y=Freq)) + geom_point()
+
+scatter.smooth(x=dat$Var1, y=dat$Freq, main="2")
+
+### correlation
+dat <- mutate_at(dat, vars(1:1),as.numeric)
+cor(dat$Var1, dat$Freq)
+
+### linear regression 
+linmod <- lm(Freq ~ Var1, data = dat)
+linmod
+summary(linmod)
+summary(linmod)$r.squared
+
+### Weather KNN Model
+weather = data[,-c(1,2,3,5,6,7,8,9,13,14,17,21,26,27)]
+weather = weather[complete.cases(weather),]
+n = nrow(weather)
+n_train = floor(n*.5)
+index_train <- sample(1:n,n_train,replace=FALSE)
+train = weather[index_train,-1]
+test = weather[-index_train,-1]
+train_target = weather[index_train,1]
+test_target = weather[-index_train,1]
+loops = 100
+k_data = data.frame("k" = rep(0, loops),"accuracy" = rep(0,loops))
+
+# Runs KNN 100 times to select best k-value
+for(i in c(1:loops)){
+  fit = knn(train, test, cl=train_target, k=i)
+  tab = table(fit,test_target)
+  accuracy <- function(x){sum(diag(x)/(sum(rowSums(x)))) * 100}
+  acc = accuracy(tab)
+  k_data[i,1] = i
+  k_data[i,2] = acc
+}
+head(k_data)
+ggplot(k_data, aes(k, accuracy)) + geom_line()
+#citation for accuracy function: https://towardsdatascience.com/k-nearest-neighbors-algorithm-with-examples-in-r-simply-explained-knn-1f2c88da405c
+
+# Plot accuracy of models for each k-value
+ggplot(k_data, aes(k, accuracy)) + geom_line() + ggtitle("Test Data Accuracy vs K-Value")
+######################
+```
+
+
