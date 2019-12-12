@@ -43,5 +43,6 @@ cor(dat$Var1, dat$Freq)
 linmod <- lm(Freq ~ Var1, data = dat)
 linmod
 summary(linmod)
+summary(linmod)$r.squared
 ######################
 ```
