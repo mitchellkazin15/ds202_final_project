@@ -75,7 +75,67 @@ ggplot(k_data, aes(k, accuracy)) + geom_line()
 
 # Plot accuracy of models for each k-value
 ggplot(k_data, aes(k, accuracy)) + geom_line() + ggtitle("Test Data Accuracy vs K-Value")
-######################
+
+###Spatial Mapping and Airplane Data
+us_states <- map_data("state")
+head(us_states)
+head(state.x77)
+UFO = read.csv("consolidated_weather_V03.csv")
+planes = read.csv("faa_registration.csv")
+loc <- state.name[match(UFO$state,state.abb)]
+planeLoc <- state.name[match(planes$STATE,state.abb)]
+planeLoc <- table(planeLoc)
+head(planeLoc)
+loc <- table(loc)
+barplot(loc, main = "Count of UFO sightings in the US", xlab = "State", ylab = "Count", las = 2)
+barplot(planeLoc, main = "Count of plane sightings in the US", xlab = "State", ylab = "Count", las = 2)
+loc <- as.data.frame(loc)
+planeLoc <- as.data.frame(planeLoc)
+names(loc) = c("region", "freq")
+names(planeLoc) = c("region", "planeFreq")
+loc$region <- tolower(loc$region)
+planeLoc$region <- tolower(planeLoc$region)
+head(planeLoc)
+head(us_states)
+ufo_sightings <- left_join(us_states, loc)
+ufo_sightings <- left_join(ufo_sightings, planeLoc)
+statepop <- as.data.frame(state.x77[,1])
+statepop <- cbind(States = rownames(statepop), statepop)
+names(statepop) <- c("region","population")
+rownames(statepop) <- NULL
+statepop$region <- tolower(statepop$region)
+ufo_sightings <- left_join(ufo_sightings, statepop)
+head(ufo_sightings)
+p0 <- ggplot(data = ufo_sightings,
+             mapping = aes(x = long, y = lat, group = group, fill = freq/population))
+
+p1 <- p0 + geom_polygon(color = "gray90", size = 0.1) +
+    coord_map(projection = "albers", lat0 = 39, lat1 = 45)
+
+p1<- p1 + labs(title = "Frequency of UFO Sightings")  + labs(fill = "Count")
+
+
+p2 <- p1 + scale_fill_gradient(low = "white", high = "#CB454A") +
+        labs(title = "Frequency of UFO Sightings") 
+p2 + labs(fill = "Count")
+
+p0 <- ggplot(data = ufo_sightings,
+             mapping = aes(x = long, y = lat, group = group, fill = planeFreq/population))
+
+p1 <- p0 + geom_polygon(color = "gray90", size = 0.1) +
+    coord_map(projection = "albers", lat0 = 39, lat1 = 45)
+
+p1<- p1 + labs(title = "Frequency of plane Sightings")  + labs(fill = "Count")
+
+
+p2 <- p1 + scale_fill_gradient(low = "white", high = "#00ff00") +
+        labs(title = "Frequency of Plane Sightings") 
+p2 + labs(fill = "Count")
+
+ggplot(ufo_sightings, aes(x = freq, y = planeFreq)) + geom_point(size=2, shape=23) + geom_smooth(method='lm', formula= y~x) + ggtitle("UFO Sightings vs Plane Sightings") + xlab("UFO Sightings") + ylab("Plane Sightings")
+ufo.lm = lm(freq ~ planeFreq, data=ufo_sightings) 
+summary(ufo.lm)$r.squared 
+t.test(ufo_sightings$freq, ufo_sightings$planeFreq)
 ```
 
 
