@@ -13,4 +13,35 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 data = read.csv("consolidated_weather_V03.csv")
 head(data)
+library(ggplot2)
+library(class)
+```
+
+```{r}
+################### Visibility Exploration
+### summary statistics
+data <- mutate_at(data, vars(17:17),as.numeric)
+summary(data$vis)
+
+### frequency of sightings by visibility
+dat <- as.data.frame(table(data$vis))
+dat
+
+### histogram
+ggplot(data, aes(x=vis)) + geom_histogram() + ggtitle("Count of UFO Sightings by Visibility") + xlab("Visibility") + ylab("Count of UFO Sightings")
+
+### scatter plot
+ggplot(dat, aes(x=Var1, y=Freq)) + geom_point()
+
+scatter.smooth(x=dat$Var1, y=dat$Freq, main="2")
+
+### correlation
+dat <- mutate_at(dat, vars(1:1),as.numeric)
+cor(dat$Var1, dat$Freq)
+
+### linear regression 
+linmod <- lm(Freq ~ Var1, data = dat)
+linmod
+summary(linmod)
+######################
 ```
